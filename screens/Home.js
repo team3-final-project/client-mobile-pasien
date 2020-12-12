@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import * as Notifications from 'expo-notifications'
+import Constants from 'expo-constants'
+import * as Permissions from 'expo-permissions'
 import {
   ScrollView,
   View,
@@ -6,10 +9,100 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Platform,
+  Button
 } from 'react-native'
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false
+  })
+})
+
 function Home({ route }) {
+  const [expoPushToken, setExpoPushToken] = useState('')
+  const [notification, setNotification] = useState(false)
+  const notificationListener = useRef()
+  const responseListener = useRef()
+
+  async function registerForPushNotificationsAsync() {
+    let token
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      )
+      let finalStatus = existingStatus
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+        finalStatus = status
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!')
+        return
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data
+      console.log(token)
+    } else {
+      alert('Must use physical device for Push Notifications')
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C'
+      })
+    }
+    return token
+  }
+
+  async function sendPushNotification(expoPushToken) {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Reminder',
+      body: 'Waktu nya untuk minum obat',
+      data: { data: 'goes here' }
+    }
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(message)
+    })
+  }
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification)
+      }
+    )
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response)
+      }
+    )
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener)
+      Notifications.removeNotificationSubscription(responseListener)
+    }
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -27,6 +120,12 @@ function Home({ route }) {
             </Text>
           </View>
         </View>
+        <Button
+          title="Press to Send Notification"
+          onPress={async () => {
+            await sendPushNotification(expoPushToken)
+          }}
+        />
         <Text style={styles.medicalHeader}>Laporan Medis Anda</Text>
         {/* CARD FOR TEST SCROLL ONLY */}
         <View style={styles.reportCardSection}>
@@ -88,6 +187,7 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   profileSection: {
+    flex: 1,
     width: 350,
     padding: 20,
     marginLeft: 20,
@@ -103,7 +203,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    width: 200
+    width: '70%'
   },
   birthplace: {
     width: 200,
@@ -119,7 +219,8 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   reportCardSection: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: '5%'
   },
   reportCard: {
     marginTop: 10,
