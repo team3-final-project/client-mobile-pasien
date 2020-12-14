@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import * as Notifications from 'expo-notifications'
+import Constants from 'expo-constants'
+import * as Permissions from 'expo-permissions'
 import {
   ScrollView,
   View,
@@ -9,7 +12,55 @@ import {
   SafeAreaView
 } from 'react-native'
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false
+  })
+})
+
 function Home({ route }) {
+  const [expoPushToken, setExpoPushToken] = useState('')
+  const [notification, setNotification] = useState(false)
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => setExpoPushToken(token))
+      .catch((err) => console.log(err))
+  }, [])
+  console.log(expoPushToken, 'di Console Log')
+  async function registerForPushNotificationsAsync() {
+    let token
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      )
+      let finalStatus = existingStatus
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+        finalStatus = status
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!')
+        return
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data
+    } else {
+      alert('Must use physical device for Push Notifications')
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C'
+      })
+    }
+    return token
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -88,6 +139,7 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   profileSection: {
+    flex: 1,
     width: 350,
     padding: 20,
     marginLeft: 20,
@@ -103,7 +155,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    width: 200
+    width: '70%'
   },
   birthplace: {
     width: 200,
@@ -119,7 +171,8 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   reportCardSection: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: '5%'
   },
   reportCard: {
     marginTop: 10,
