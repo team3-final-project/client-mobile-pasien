@@ -22,14 +22,13 @@ Notifications.setNotificationHandler({
 
 function Home({ route }) {
   const [expoPushToken, setExpoPushToken] = useState('')
-  const [notification, setNotification] = useState(false)
 
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token))
       .catch((err) => console.log(err))
   }, [])
-  console.log(expoPushToken, 'di Console Log')
+
   async function registerForPushNotificationsAsync() {
     let token
     if (Constants.isDevice) {
