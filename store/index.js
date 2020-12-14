@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import { AsyncStorage } from 'react-native'
 
 const initialState = {
     isLoggedIn: false,
@@ -9,7 +10,7 @@ const initialState = {
 export function login(input) {
 
     return (dispatch) => {
-        fetch('http://localhost:3000/patient', {
+        fetch('http://192.168.1.71:3000/patient', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,18 +25,24 @@ export function login(input) {
             }
         })
         .then(data => {
-            dispatch({ type: 'login_patient', payload: data.access_token })
+            function setData(){ 
+                return async (dispatch) => {
+                    const token = await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
+                }
+            }
+            dispatch({ type: 'login_patient'})
         })
     }
 }
 
 export function readRecord() {
-    const access_token = localStorage.getItem('access_token')
-    return (dispatch) => {
-        fetch('http://localhost:3000/patient', {
+    return async (dispatch) => {
+        const access_token = await AsyncStorage.getItem('access_token')
+         
+        fetch('http://192.168.1.71:3000/patient', {
             method: 'GET',
             headers: {
-                access_token: access_token
+                access_token: JSON.parse(access_token)
             }
         })
         .then(response => {
@@ -54,7 +61,6 @@ export function readRecord() {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'login_patient':
-            localStorage.setItem('access_token', action.payload)
             return {...state, isLoggedIn: true}
         case 'get_record':
             return { ...state, record: action.payload }
