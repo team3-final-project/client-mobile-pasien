@@ -9,8 +9,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  SafeAreaView,
-  Button
+  SafeAreaView
 } from 'react-native'
 
 Notifications.setNotificationHandler({
@@ -27,10 +26,10 @@ function Home({ route }) {
 
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then((token) => console.log(token, 'di useEffect'))
+      .then((token) => setExpoPushToken(token))
       .catch((err) => console.log(err))
   }, [])
-
+  console.log(expoPushToken, 'di Console Log')
   async function registerForPushNotificationsAsync() {
     let token
     if (Constants.isDevice) {
