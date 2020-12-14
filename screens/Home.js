@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   SafeAreaView
 } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
+import { readRecord } from '../store/index'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -21,6 +23,13 @@ Notifications.setNotificationHandler({
 })
 
 function Home({ route }) {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(readRecord())
+  }, [])
+  
   const [expoPushToken, setExpoPushToken] = useState('')
 
   useEffect(() => {
@@ -60,6 +69,12 @@ function Home({ route }) {
     return token
   }
 
+  const { patientData } = useSelector((state) => state.record)
+
+  if(!patientData) {
+    return <p>loadingg...</p>
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -70,56 +85,41 @@ function Home({ route }) {
             style={{ alignSelf: 'flex-start', width: 128 }}
           />
           <View style={styles.bio}>
-            <Text style={styles.name}>M. Dicky Andeyan Naratama</Text>
-            <Text style={styles.birthplace}>Cianjur, 24 Desember 1995</Text>
+            <Text style={styles.name}>{patientData.name}</Text>
+            <Text style={styles.birthplace}>{patientData.email}</Text>
+            <Text style={styles.birthplace}>{patientData.birth_date}</Text>
             <Text style={styles.address}>
-              Komplek GBA-2 Blok J5 no 32, Kab. Bandung
+              {patientData.address}
             </Text>
           </View>
         </View>
-        <Text style={styles.medicalHeader}>Laporan Medis Anda</Text>
+        <Text style={styles.medicalHeader}>Laporan Diagnosa Dokter</Text>
         {/* CARD FOR TEST SCROLL ONLY */}
         <View style={styles.reportCardSection}>
-          <View style={styles.reportCard}>
-            <Text>Diagnosa:</Text>
-            <Text>Obat: </Text>
-            <Text>Dokter: </Text>
-            <TouchableOpacity style={styles.detailBtn}>
-              <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.reportCard}>
-            <Text>Diagnosa:</Text>
-            <Text>Obat: </Text>
-            <Text>Dokter: </Text>
-            <TouchableOpacity style={styles.detailBtn}>
-              <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.reportCard}>
-            <Text>Diagnosa:</Text>
-            <Text>Obat: </Text>
-            <Text>Dokter: </Text>
-            <TouchableOpacity style={styles.detailBtn}>
-              <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.reportCard}>
-            <Text>Diagnosa:</Text>
-            <Text>Obat: </Text>
-            <Text>Dokter: </Text>
-            <TouchableOpacity style={styles.detailBtn}>
-              <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.reportCard}>
-            <Text>Diagnosa:</Text>
-            <Text>Obat: </Text>
-            <Text>Dokter: </Text>
-            <TouchableOpacity style={styles.detailBtn}>
-              <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
-            </TouchableOpacity>
-          </View>
+          {patientData.MedicalRecords.map(el => (
+            <View style={styles.reportCard}>
+              <Text>Diagnosa: {el.diagnose}</Text>
+              <Text>Obat: {el.medicine_name}</Text>
+              <Text>Dosis: {el.dosis}</Text>
+              <Text>Jumlah obat: {el.jumlah_obat}</Text>
+              <TouchableOpacity style={styles.detailBtn}>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <Text style={styles.medicalHeader}>Laporan Tes Anda</Text>
+        <View style={styles.reportCardSection}>
+          {patientData.HospitalRecords.map(el => (
+            <View style={styles.reportCard}>
+              <Text>{el.type_test}</Text>
+              <Image source={{uri: el.file}}/>
+              <Text>Tanggal: {el.date}</Text>
+              <TouchableOpacity style={styles.detailBtn}>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
