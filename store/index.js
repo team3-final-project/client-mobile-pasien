@@ -27,6 +27,7 @@ export function login(input) {
         .then(data => {
             function setData(){ 
                 return async (dispatch) => {
+                    console.log('masuk sini cuyy')
                     const token = await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
                 }
             }
@@ -38,6 +39,7 @@ export function login(input) {
 export function readRecord() {
     return async (dispatch) => {
         const access_token = await AsyncStorage.getItem('access_token')
+        console.log(access_token)
          
         fetch('http://192.168.1.71:3000/patient', {
             method: 'GET',

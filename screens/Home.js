@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { readRecord } from '../store/index'
-/*
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -22,7 +22,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
-*/
+
 function Home({ route }) {
 
   const dispatch = useDispatch()
@@ -30,7 +30,7 @@ function Home({ route }) {
   useEffect(() => {
     dispatch(readRecord())
   }, [])
-  /*
+  
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -52,6 +52,13 @@ function Home({ route }) {
       Notifications.removeNotificationSubscription(responseListener);
     };
   }, []);
+
+
+  const { patientData } = useSelector((state) => state.record)
+
+  useEffect(() => {
+    sendPushNotification(expoPushToken)
+  }, [patientData])
 
   async function sendPushNotification(expoPushToken) {
     const message = {
@@ -103,8 +110,6 @@ function Home({ route }) {
   
     return token;
   }
-  */
-  const { patientData } = useSelector((state) => state.record)
 
   if(!patientData) {
     return <Text>loadingg...</Text>
@@ -112,6 +117,12 @@ function Home({ route }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Button
+        title="Press to Send Notification"
+        onPress={async () => {
+          await sendPushNotification(expoPushToken);
+        }}
+      />
       <ScrollView>
         <Text style={styles.header}>Selamat Datang</Text>
         <View style={styles.profileSection}>
