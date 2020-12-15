@@ -9,32 +9,53 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  SafeAreaView,
-  Button
+  SafeAreaView
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { readRecord } from '../store/index'
+import firebase from '../firebase.js'
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+function Home() {
 
-function Home({ route }) {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const dispatch = useDispatch()
+  const db = firebase.firestore()
 
   useEffect(() => {
     dispatch(readRecord())
   }, [])
   
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  const parameterChange = async () => {
+    console.log('masuk sini')
+    let push = false
+    
+    await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').get().then(value => {
+      console.log(value.data())
+      push = value.data().notification
+      console.log(push, 'disini harusnya true')
+    })
+
+    console.log(push, '<<<<')
+
+    if(push) {
+      console.log('siap di push notif')
+      newMedicalRecord(expoPushToken)
+      dispatch(readRecord())
+    }
+    await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
+      notification: false
+    })
+  }
+  
+  db.collection('med').doc('h5mjuGm0apJBldX6fMc7').onSnapshot(snapshot => {
+    console.log('berubah')
+    parameterChange()
+  })
+  
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -55,17 +76,22 @@ function Home({ route }) {
 
 
   const { patientData } = useSelector((state) => state.record)
+  
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+  
 
-  useEffect(() => {
-    sendPushNotification(expoPushToken)
-  }, [patientData])
-
-  async function sendPushNotification(expoPushToken) {
+  async function newMedicalRecord(expoPushToken) {
     const message = {
       to: expoPushToken,
       sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
+      title: 'Ada yang baru nih!',
+      body: 'Diagnosamu sudah terbaharui!',
       data: { data: 'goes here' },
     };
   
@@ -117,12 +143,6 @@ function Home({ route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Button
-        title="Press to Send Notification"
-        onPress={async () => {
-          await sendPushNotification(expoPushToken);
-        }}
-      />
       <ScrollView>
         <Text style={styles.header}>Selamat Datang</Text>
         <View style={styles.profileSection}>
@@ -146,7 +166,7 @@ function Home({ route }) {
             <View style={styles.reportCard} key={el.id}>
               <Text>Diagnosa: {el.diagnose}</Text>
               <Text>Obat: {el.medicine_name}</Text>
-              <Text>Dosis: {el.dosis}</Text>
+              <Text>Dosis: {el.dosis} perhari</Text>
               <Text>Jumlah obat: {el.jumlah_obat}</Text>
               <TouchableOpacity style={styles.detailBtn}>
                 <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
