@@ -10,7 +10,7 @@ import {
 import { login } from '../store/index'
 import { useDispatch, useSelector } from 'react-redux'
 
-function Home({ navigation }) {
+function Login({ navigation }) {
   const [nik, setNik] = useState('')
   const [name, setName] = useState('')
 
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Home
+export default Login
