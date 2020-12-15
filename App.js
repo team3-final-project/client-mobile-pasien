@@ -13,7 +13,11 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Welcome" component={Login} />
-          <Stack.Screen name="Dashboard" component={Home} />
+          <Stack.Screen
+            name="Dashboard"
+            component={Home}
+            options={{ headerLeft: () => null }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

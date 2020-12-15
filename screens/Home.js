@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import * as Linking from 'expo-linking'
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants'
 import * as Permissions from 'expo-permissions'
@@ -24,12 +25,12 @@ Notifications.setNotificationHandler({
 });
 */
 function Home({ route }) {
-
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(readRecord())
   }, [])
+
   /*
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
@@ -106,8 +107,17 @@ function Home({ route }) {
   */
   const { patientData } = useSelector((state) => state.record)
 
-  if(!patientData) {
-    return <Text>loadingg...</Text>
+  if (!patientData) {
+    return (
+      <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    )
+  }
+
+  function btnDetailPress(link) {
+    Linking.openURL(link)
+    console.log(link)
   }
 
   return (
@@ -123,35 +133,45 @@ function Home({ route }) {
             <Text style={styles.name}>{patientData.name}</Text>
             <Text style={styles.birthplace}>{patientData.email}</Text>
             <Text style={styles.birthplace}>{patientData.birth_date}</Text>
-            <Text style={styles.address}>
-              {patientData.address}
-            </Text>
+            <Text style={styles.address}>{patientData.address}</Text>
           </View>
         </View>
         <Text style={styles.medicalHeader}>Laporan Diagnosa Dokter</Text>
         {/* CARD FOR TEST SCROLL ONLY */}
         <View style={styles.reportCardSection}>
-          {patientData.MedicalRecords.map(el => (
+          {/* {patientData.MedicalRecords.map((el) => (
             <View style={styles.reportCard} key={el.id}>
               <Text>Diagnosa: {el.diagnose}</Text>
               <Text>Obat: {el.medicine_name}</Text>
               <Text>Dosis: {el.dosis}</Text>
               <Text>Jumlah obat: {el.jumlah_obat}</Text>
               <TouchableOpacity style={styles.detailBtn}>
-                <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>
+                  Detail
+                </Text>
               </TouchableOpacity>
             </View>
-          ))}
+          ))} */}
+          <View style={styles.reportCard}>
+            <Text>Diagnosa</Text>
+            <Text>Obat</Text>
+            <Text>Dosis</Text>
+            <Text>Jumlah Obat</Text>
+          </View>
         </View>
         <Text style={styles.medicalHeader}>Laporan Tes Anda</Text>
         <View style={styles.reportCardSection}>
-          {patientData.HospitalRecords.map(el => (
+          {patientData.HospitalRecords.map((el) => (
             <View style={styles.reportCard} key={el.id}>
               <Text>{el.type_test}</Text>
-              <Image source={{uri: el.file}}/>
+              <Image style={styles.stretch} source={{ uri: el.file }} />
               <Text>Tanggal: {el.date}</Text>
-              <TouchableOpacity style={styles.detailBtn}>
-                <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
+              <TouchableOpacity
+                style={styles.detailBtn}
+                onPress={() => btnDetailPress(el.file)}>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>
+                  Detail
+                </Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -217,6 +237,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#99AAAB',
     padding: 20
+  },
+  stretch: {
+    marginVertical: 15,
+    width: 250,
+    height: 200,
+    alignSelf: 'center'
   },
   detailBtn: {
     alignSelf: 'flex-end',
