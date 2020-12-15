@@ -10,102 +10,141 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  SafeAreaView,
-  Button
+  SafeAreaView
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { readRecord } from '../store/index'
-/*
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-*/
-function Home({ route }) {
+import firebase from '../firebase.js'
+
+function Home() {
+  const [expoPushToken, setExpoPushToken] = useState('')
+  const [notification, setNotification] = useState(false)
+  const notificationListener = useRef()
+  const responseListener = useRef()
+
   const dispatch = useDispatch()
+  const db = firebase.firestore()
 
   useEffect(() => {
     dispatch(readRecord())
   }, [])
 
-  /*
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  const parameterChange = async () => {
+    console.log('masuk sini')
+    let push = false
+
+    await db
+      .collection('med')
+      .doc('h5mjuGm0apJBldX6fMc7')
+      .get()
+      .then((value) => {
+        console.log(value.data())
+        push = value.data().notification
+        console.log(push, 'disini harusnya true')
+      })
+
+    console.log(push, '<<<<')
+
+    if (push) {
+      console.log('siap di push notif')
+      newMedicalRecord(expoPushToken)
+      dispatch(readRecord())
+    }
+    await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
+      notification: false
+    })
+  }
+
+  db.collection('med')
+    .doc('h5mjuGm0apJBldX6fMc7')
+    .onSnapshot((snapshot) => {
+      console.log('berubah')
+      parameterChange()
+    })
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification)
+      }
+    )
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response)
+      }
+    )
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
-    };
-  }, []);
+      Notifications.removeNotificationSubscription(notificationListener)
+      Notifications.removeNotificationSubscription(responseListener)
+    }
+  }, [])
 
-  async function sendPushNotification(expoPushToken) {
+  const { patientData } = useSelector((state) => state.record)
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false
+    })
+  })
+
+  async function newMedicalRecord(expoPushToken) {
     const message = {
       to: expoPushToken,
       sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
-      data: { data: 'goes here' },
-    };
-  
+      title: 'Ada yang baru nih!',
+      body: 'Diagnosamu sudah terbaharui!',
+      data: { data: 'goes here' }
+    }
+
     await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(message),
-    });
+      body: JSON.stringify(message)
+    })
   }
-  
+
   async function registerForPushNotificationsAsync() {
-    let token;
+    let token
     if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-      let finalStatus = existingStatus;
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      )
+      let finalStatus = existingStatus
       if (existingStatus !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+        finalStatus = status
       }
       if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
+        alert('Failed to get push token for push notification!')
+        return
       }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
+      token = (await Notifications.getExpoPushTokenAsync()).data
+      console.log(token)
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert('Must use physical device for Push Notifications')
     }
-  
+
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
+        lightColor: '#FF231F7C'
+      })
     }
-  
-    return token;
+
+    return token
   }
-  */
-  const { patientData } = useSelector((state) => state.record)
 
   if (!patientData) {
     return (
@@ -143,7 +182,7 @@ function Home({ route }) {
             <View style={styles.reportCard} key={el.id}>
               <Text>Diagnosa: {el.diagnose}</Text>
               <Text>Obat: {el.medicine_name}</Text>
-              <Text>Dosis: {el.dosis}</Text>
+              <Text>Dosis: {el.dosis} perhari</Text>
               <Text>Jumlah obat: {el.jumlah_obat}</Text>
               <TouchableOpacity style={styles.detailBtn}>
                 <Text style={{ color: '#fff', alignSelf: 'center' }}>
