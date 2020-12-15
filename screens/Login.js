@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 function Home({ navigation }) {
 
+
   const [ nik, setNik ] = useState("")
   const [ name, setName ] = useState("")
 
