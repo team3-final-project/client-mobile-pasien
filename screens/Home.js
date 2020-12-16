@@ -169,6 +169,10 @@ function Home({ navigation }) {
     navigation.navigate('Maps')
   }
 
+  function navigateToHealthyLife() {
+    navigation.navigate('HealthyLife')
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -263,6 +267,15 @@ function Home({ navigation }) {
                 <Text style={styles.cardOption}>Rumah Sakit Terdekat</Text>
                 <Image
                   source={require('../assets/healthcare.png')}
+                  style={{ resizeMode: 'contain', width: 80, height: 80 }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.reportCardSection}>
+              <TouchableOpacity style={styles.reportCard} onPress={navigateToHealthyLife}>
+                <Text style={styles.cardOption}>Healty Life</Text>
+                <Image
+                  source={require('../assets/healthylife.png')}
                   style={{ resizeMode: 'contain', width: 80, height: 80 }}
                 />
               </TouchableOpacity>
