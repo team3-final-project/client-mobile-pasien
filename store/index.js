@@ -9,7 +9,7 @@ const initialState = {
 
 export function login(input) {
   return (dispatch) => {
-    fetch('http://192.168.43.188:3000/patient', {
+    fetch('http://192.168.43.137:3000/patient', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ export function login(input) {
 export function readRecord() {
   return async (dispatch) => {
     const access_token = await AsyncStorage.getItem('access_token')
-    fetch('http://192.168.43.188:3000/patient', {
+    fetch('http://192.168.43.137:3000/patient', {
       method: 'GET',
       headers: {
         access_token

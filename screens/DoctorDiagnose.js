@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import * as Linking from 'expo-linking'
+// import * as Linking from 'expo-linking'
+
 import { readRecord } from '../store/index'
 
 function DiagnoseDoc() {
@@ -12,11 +13,12 @@ function DiagnoseDoc() {
   }, [])
 
   function btnDetailPress(link) {
-    if (link == 'file') {
-      alert('Invalid Link')
-    } else {
-      Linking.openURL(link)
-    }
+    console.log(link, '<<<< linkUrl');
+    // if (link == 'file') {
+    //   alert('Invalid Link')
+    // } else {
+    //   Linking.openURL(link)
+    // }
   }
 
   console.log(patientData.MedicalRecords.length)
@@ -58,13 +60,13 @@ function DiagnoseDoc() {
               <Text style={styles.h2}>{el.medicine_name}</Text>
               <Text style={{ color: '#95afc0' }}>{el.dosis}</Text>
               <Text>Jumlah obat: {el.jumlah_obat}</Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.btn}
                 onPress={() => btnDetailPress(el.file)}>
                 <Text style={{ color: '#fff', textAlign: 'center' }}>
                   Download
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           ))
         )}
