@@ -16,7 +16,7 @@ function HealthyLife() {
             </View>
             <Image
                 style={{ alignSelf: 'center', marginBottom: 10 }}
-                source={require('../assets/scientist.png')}
+                source={require('../assets/patient.png')}
             />
             <View
                 style={{
