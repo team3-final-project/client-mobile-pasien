@@ -165,6 +165,10 @@ function Home({ navigation }) {
     navigation.navigate('Welcome')
   }
 
+  function navigateToMaps() {
+    navigation.navigate('Maps')
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -255,7 +259,7 @@ function Home({ navigation }) {
               </TouchableOpacity>
             </View>
           ))} */}
-              <TouchableOpacity style={styles.reportCard}>
+              <TouchableOpacity style={styles.reportCard} onPress={navigateToMaps}>
                 <Text style={styles.cardOption}>Rumah Sakit Terdekat</Text>
                 <Image
                   source={require('../assets/healthcare.png')}
