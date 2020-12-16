@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Login, Home, Diagnose, DoctorDiag } from './screens'
+import { Login, Home, Diagnose, DoctorDiag, Maps } from './screens'
 import { Provider } from 'react-redux'
 import store from './store/index'
 
@@ -20,6 +20,7 @@ export default function App() {
           />
           <Stack.Screen name="Diagnose" component={Diagnose} />
           <Stack.Screen name="Report Doctor" component={DoctorDiag} />
+          <Stack.Screen name="Maps" component={Maps} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

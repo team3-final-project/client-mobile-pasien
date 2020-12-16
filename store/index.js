@@ -9,7 +9,7 @@ const initialState = {
 
 export function login(input) {
   return (dispatch) => {
-    fetch('http://192.168.0.104:3000/patient', {
+    fetch('http://192.168.43.188:3000/patient', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -23,13 +23,16 @@ export function login(input) {
           return Promise.reject('something went wrong!')
         }
       })
-      .then((data) => {
-        console.log(data.access_token)
-        function setData() {
-          return async (dispatch) => {
-            await AsyncStorage.setItem('access_token', data.access_token)
-          }
-        }
+      .then(async (data) => {
+        // console.log(data.access_token, '<<<data access token')
+        await AsyncStorage.setItem('access_token', data.access_token)
+        // function setData() {
+        //   return async (dispatch) => {
+        //     await AsyncStorage.setItem('access_token', data.access_token)
+        //   }
+        // }
+        // const ab = await AsyncStorage.getItem('access_token')
+        // console.log(ab, '<<<< ini token di storage');
         dispatch({ type: 'login_patient' })
       })
   }
@@ -38,11 +41,11 @@ export function login(input) {
 export function readRecord() {
   return async (dispatch) => {
     const access_token = await AsyncStorage.getItem('access_token')
-    fetch('http://192.168.0.104:3000/patient', {
+    fetch('http://192.168.43.188:3000/patient', {
       method: 'GET',
       headers: {
-        access_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlrIjoiMTIzNDU2Nzg5IiwibmFtZSI6IlBhdGllbnQgMSIsImlhdCI6MTYwODAxNzg4MH0.qRjDisQmppTm0rrRjVCR3PVEJx1_Bqos-tIlU6OpHdA'
+        access_token
+          // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlrIjoiMTIzNDU2Nzg5IiwibmFtZSI6IlBhdGllbnQgMSIsImlhdCI6MTYwODAxNzg4MH0.qRjDisQmppTm0rrRjVCR3PVEJx1_Bqos-tIlU6OpHdA'
       }
     })
       .then((response) => {
