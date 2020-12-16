@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Login, Home } from './screens'
+import { Login, Home, Diagnose } from './screens'
 import { Provider } from 'react-redux'
 import store from './store/index'
 
@@ -13,7 +13,12 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Welcome" component={Login} />
-          <Stack.Screen name="Dashboard" component={Home} />
+          <Stack.Screen
+            name="Dashboard"
+            component={Home}
+            options={{ headerLeft: () => null }}
+          />
+          <Stack.Screen name="Diagnose" component={Diagnose} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

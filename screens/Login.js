@@ -10,24 +10,24 @@ import {
 import { login } from '../store/index'
 import { useDispatch, useSelector } from 'react-redux'
 
-function Home({ navigation }) {
-
-
-  const [ nik, setNik ] = useState("")
-  const [ name, setName ] = useState("")
+function Login({ navigation }) {
+  const [nik, setNik] = useState('')
+  const [name, setName] = useState('')
 
   const dispatch = useDispatch()
   const isLoggedIn = useSelector((state) => state.isLoggedIn)
 
   function onChangeScreen() {
-    dispatch(login({
-      nik: nik,
-      name: name
-    }))
+    dispatch(
+      login({
+        nik: nik,
+        name: name
+      })
+    )
   }
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       navigation.navigate('Dashboard')
     }
   }, [isLoggedIn])
@@ -39,7 +39,6 @@ function Home({ navigation }) {
   const handlingName = (text) => {
     setName(text)
   }
-  
 
   return (
     <View style={styles.container}>
@@ -49,17 +48,24 @@ function Home({ navigation }) {
           style={{ marginBottom: 10, alignSelf: 'center' }}
         />
         <Text style={{ alignSelf: 'center', marginBottom: 10 }}>
-          Login to your account
+          Masukkan Identitas Anda
         </Text>
         <View style={styles.inputForm}>
-          <TextInput placeholder="NIK" keyboardType="number-pad" onChangeText={(text) => handlingNik(text)}/>
+          <TextInput
+            placeholder="NIK"
+            keyboardType="number-pad"
+            onChangeText={(text) => handlingNik(text)}
+          />
         </View>
         <View style={styles.inputForm}>
-          <TextInput placeholder="Nama Lengkap" onChangeText={(text) => handlingName(text)} />
+          <TextInput
+            placeholder="Nama Lengkap"
+            onChangeText={(text) => handlingName(text)}
+          />
         </View>
         <View style={styles.sectionBtn}>
           <TouchableOpacity style={styles.loginBtn} onPress={onChangeScreen}>
-            <Text style={{ color: '#ffffff' }}>Login</Text>
+            <Text style={{ color: '#ffffff' }}>Check Data</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -107,4 +113,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Home
+export default Login

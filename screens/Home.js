@@ -15,12 +15,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { readRecord } from '../store/index'
 import firebase from '../firebase.js'
 
-function Home() {
-
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+function Home({ navigation }) {
+  const [expoPushToken, setExpoPushToken] = useState('')
+  const [notification, setNotification] = useState(false)
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   const dispatch = useDispatch()
   const db = firebase.firestore()
@@ -28,123 +27,149 @@ function Home() {
   useEffect(() => {
     dispatch(readRecord())
   }, [])
-  
-  const parameterChange = async () => {
-    console.log('masuk sini')
-    let push = false
-    
-    await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').get().then(value => {
-      console.log(value.data())
-      push = value.data().notification
-      console.log(push, 'disini harusnya true')
-    })
 
-    console.log(push, '<<<<')
+  // const parameterChange = async () => {
+  //   console.log('masuk sini')
+  //   let push = false
 
-    if(push) {
-      console.log('siap di push notif')
-      newMedicalRecord(expoPushToken)
-      dispatch(readRecord())
-    }
-    await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
-      notification: false
-    })
-  }
-  
-  db.collection('med').doc('h5mjuGm0apJBldX6fMc7').onSnapshot(snapshot => {
-    console.log('berubah')
-    parameterChange()
-  })
-  
+  //   await db
+  //     .collection('med')
+  //     .doc('h5mjuGm0apJBldX6fMc7')
+  //     .get()
+  //     .then((value) => {
+  //       console.log(value.data())
+  //       push = value.data().notification
+  //       console.log(push, 'disini harusnya true')
+  //     })
 
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+  //   console.log(push, '<<<<')
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+  //   if (push) {
+  //     console.log('siap di push notif')
+  //     newMedicalRecord(expoPushToken)
+  //     dispatch(readRecord())
+  //   }
+  //   await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
+  //     notification: false
+  //   })
+  // }
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+  // db.collection('med')
+  //   .doc('h5mjuGm0apJBldX6fMc7')
+  //   .onSnapshot((snapshot) => {
+  //     console.log('berubah')
+  //     parameterChange()
+  //   })
 
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
-    };
-  }, []);
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
 
+  //   notificationListener.current = Notifications.addNotificationReceivedListener(
+  //     (notification) => {
+  //       setNotification(notification)
+  //     }
+  //   )
+
+  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(
+  //     (response) => {
+  //       console.log(response)
+  //     }
+  //   )
+
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(notificationListener)
+  //     Notifications.removeNotificationSubscription(responseListener)
+  //   }
+  // }, [])
 
   const { patientData } = useSelector((state) => state.record)
-  
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
-  });
-  
 
-  async function newMedicalRecord(expoPushToken) {
-    const message = {
-      to: expoPushToken,
-      sound: 'default',
-      title: 'Ada yang baru nih!',
-      body: 'Diagnosamu sudah terbaharui!',
-      data: { data: 'goes here' },
-    };
-  
-    await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    });
-  }
-  
-  async function registerForPushNotificationsAsync() {
-    let token;
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
-    } else {
-      alert('Must use physical device for Push Notifications');
-    }
-  
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-  
-    return token;
+  // Notifications.setNotificationHandler({
+  //   handleNotification: async () => ({
+  //     shouldShowAlert: true,
+  //     shouldPlaySound: false,
+  //     shouldSetBadge: false
+  //   })
+  // })
+
+  // async function newMedicalRecord(expoPushToken) {
+  //   const message = {
+  //     to: expoPushToken,
+  //     sound: 'default',
+  //     title: 'Ada yang baru nih!',
+  //     body: 'Diagnosamu sudah terbaharui!',
+  //     data: { data: 'goes here' }
+  //   }
+
+  //   await fetch('https://exp.host/--/api/v2/push/send', {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Accept-encoding': 'gzip, deflate',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(message)
+  //   })
+  // }
+
+  // async function registerForPushNotificationsAsync() {
+  //   let token
+  //   if (Constants.isDevice) {
+  //     const { status: existingStatus } = await Permissions.getAsync(
+  //       Permissions.NOTIFICATIONS
+  //     )
+  //     let finalStatus = existingStatus
+  //     if (existingStatus !== 'granted') {
+  //       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+  //       finalStatus = status
+  //     }
+  //     if (finalStatus !== 'granted') {
+  //       alert('Failed to get push token for push notification!')
+  //       return
+  //     }
+  //     token = (await Notifications.getExpoPushTokenAsync()).data
+  //     console.log(token)
+  //   } else {
+  //     alert('Must use physical device for Push Notifications')
+  //   }
+
+  //   if (Platform.OS === 'android') {
+  //     Notifications.setNotificationChannelAsync('default', {
+  //       name: 'default',
+  //       importance: Notifications.AndroidImportance.MAX,
+  //       vibrationPattern: [0, 250, 250, 250],
+  //       lightColor: '#FF231F7C'
+  //     })
+  //   }
+
+  //   return token
+  // }
+
+  if (!patientData) {
+    return (
+      <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    )
   }
 
-  if(!patientData) {
-    return <Text>loadingg...</Text>
+  function navigateToHospitalCheck() {
+    navigation.navigate('Diagnose')
+  }
+
+  function logout() {
+    navigation.navigate('Welcome')
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text style={styles.header}>Selamat Datang</Text>
+        <View style={styles.nav}>
+          <Text style={styles.header}>Selamat Datang</Text>
+          <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+            <Text style={{ color: '#fff', textAlign: 'center' }}>Logout</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.profileSection}>
           <Image
             source={require('../assets/man.png')}
@@ -154,64 +179,133 @@ function Home() {
             <Text style={styles.name}>{patientData.name}</Text>
             <Text style={styles.birthplace}>{patientData.email}</Text>
             <Text style={styles.birthplace}>{patientData.birth_date}</Text>
-            <Text style={styles.address}>
-              {patientData.address}
-            </Text>
+            <Text style={styles.address}>{patientData.address}</Text>
           </View>
         </View>
-        <Text style={styles.medicalHeader}>Laporan Diagnosa Dokter</Text>
+
         {/* CARD FOR TEST SCROLL ONLY */}
-        <View style={styles.reportCardSection}>
-          {patientData.MedicalRecords.map(el => (
+        <SafeAreaView>
+          <ScrollView style={styles.bgCard}>
+            <Text style={styles.medicalHeader}>Menu</Text>
+            <View style={styles.reportCardSection}>
+              {/* {patientData.MedicalRecords.map((el) => (
             <View style={styles.reportCard} key={el.id}>
               <Text>Diagnosa: {el.diagnose}</Text>
               <Text>Obat: {el.medicine_name}</Text>
               <Text>Dosis: {el.dosis} perhari</Text>
               <Text>Jumlah obat: {el.jumlah_obat}</Text>
               <TouchableOpacity style={styles.detailBtn}>
-                <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>
+                  Detail
+                </Text>
               </TouchableOpacity>
             </View>
-          ))}
-        </View>
-        <Text style={styles.medicalHeader}>Laporan Tes Anda</Text>
-        <View style={styles.reportCardSection}>
-          {patientData.HospitalRecords.map(el => (
+          ))} */}
+              <TouchableOpacity style={styles.reportCard}>
+                <Text style={styles.cardOption}>Laporan Diagnosa Dokter</Text>
+                <Image
+                  source={require('../assets/case-file.png')}
+                  style={{ resizeMode: 'contain', width: 80, height: 80 }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.reportCardSection}>
+              {/* {patientData.HospitalRecords.map((el) => (
             <View style={styles.reportCard} key={el.id}>
               <Text>{el.type_test}</Text>
-              <Image source={{uri: el.file}}/>
+              <Image style={styles.stretch} source={{ uri: el.file }} />
               <Text>Tanggal: {el.date}</Text>
-              <TouchableOpacity style={styles.detailBtn}>
-                <Text style={{ color: '#fff', alignSelf: 'center' }}>Detail</Text>
+              <TouchableOpacity
+                style={styles.detailBtn}
+                onPress={() => btnDetailPress(el.file)}>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>
+                  Detail
+                </Text>
               </TouchableOpacity>
             </View>
-          ))}
-        </View>
+          ))} */}
+              <TouchableOpacity
+                style={styles.reportCard}
+                onPress={navigateToHospitalCheck}>
+                <Text style={styles.cardOption}>Laporan Hasil Checkup</Text>
+                <Image
+                  source={require('../assets/egk-report.png')}
+                  style={{ resizeMode: 'contain', width: 80, height: 80 }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.reportCardSection}>
+              {/* {patientData.HospitalRecords.map((el) => (
+            <View style={styles.reportCard} key={el.id}>
+              <Text>{el.type_test}</Text>
+              <Image style={styles.stretch} source={{ uri: el.file }} />
+              <Text>Tanggal: {el.date}</Text>
+              <TouchableOpacity
+                style={styles.detailBtn}
+                onPress={() => btnDetailPress(el.file)}>
+                <Text style={{ color: '#fff', alignSelf: 'center' }}>
+                  Detail
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))} */}
+              <TouchableOpacity style={styles.reportCard}>
+                <Text style={styles.cardOption}>Rumah Sakit Terdekat</Text>
+                <Image
+                  source={require('../assets/healthcare.png')}
+                  style={{ resizeMode: 'contain', width: 80, height: 80 }}
+                />
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
       </ScrollView>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  bgCard: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 20,
+    minHeight: '100%',
+    paddingBottom: '50%'
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 20
+    backgroundColor: '#2c3e50',
+    paddingTop: 20,
+    minHeight: '100%'
+  },
+  nav: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20
+  },
+  logoutBtn: {
+    backgroundColor: '#e74c3c',
+    padding: 10,
+    borderRadius: 8
   },
   header: {
-    fontSize: 36,
-    alignSelf: 'flex-start',
-    marginLeft: 20
+    color: '#fff',
+    fontSize: 28,
+    fontWeight: '700',
+    alignSelf: 'flex-start'
   },
   profileSection: {
     flex: 1,
+    backgroundColor: '#fff',
     width: 350,
-    padding: 20,
+    padding: 10,
     marginLeft: 20,
     marginVertical: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
     borderRadius: 10,
     borderColor: '#DAE0E2'
   },
@@ -231,23 +325,38 @@ const styles = StyleSheet.create({
     color: '#bdbdbd'
   },
   medicalHeader: {
-    fontSize: 22,
+    fontSize: 28,
+    fontWeight: '700',
     alignSelf: 'flex-start',
-    marginLeft: 20
+    marginLeft: 20,
+    marginBottom: 20
+  },
+  cardOption: {
+    fontSize: 20,
+    paddingHorizontal: 10,
+    color: '#fff'
   },
   reportCardSection: {
     alignSelf: 'center',
     marginBottom: '5%'
   },
   reportCard: {
-    marginTop: 10,
-    backgroundColor: '#e6e6e6',
-    color: '#ffff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 5,
+    backgroundColor: '#27ae60',
     width: 350,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#99AAAB',
-    padding: 20
+    paddingHorizontal: 10
+  },
+  stretch: {
+    marginVertical: 15,
+    width: 250,
+    height: 200,
+    alignSelf: 'center'
   },
   detailBtn: {
     alignSelf: 'flex-end',
