@@ -4,12 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const initialState = {
   isLoggedIn: false,
-  record: []
+  record: [],
+  nutritions: [],
+  exercises: []
 }
 
 export function login(input) {
   return (dispatch) => {
-    fetch('http://192.168.43.137:3000/patient', {
+    fetch('http://192.168.1.71:3001/patient', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -41,7 +43,7 @@ export function login(input) {
 export function readRecord() {
   return async (dispatch) => {
     const access_token = await AsyncStorage.getItem('access_token')
-    fetch('http://192.168.43.137:3000/patient', {
+    fetch('http://192.168.1.71:3001/patient', {
       method: 'GET',
       headers: {
         access_token
@@ -61,12 +63,64 @@ export function readRecord() {
   }
 }
 
+export function readNutrition(query) {
+  return (dispatch) => {
+    fetch('https://trackapi.nutritionix.com/v2/natural/nutrients', {
+      method: 'POST',
+      headers: {
+        'x-app-id': '15f77b03',
+        'x-app-key': 'ec1ba99dbd6a57054dcc5e6a76b63b62',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({query})
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return Promise.reject('something went wrong!')
+        }
+      })
+      .then((data) => {
+        dispatch({ type: 'get_nutrition', payload: data.foods })
+      })
+  }
+}
+
+export function readExercise(query) {
+  return (dispatch) => {
+    fetch('https://trackapi.nutritionix.com/v2/natural/exercise', {
+      method: 'POST',
+      headers: {
+        'x-app-id': '15f77b03',
+        'x-app-key': 'ec1ba99dbd6a57054dcc5e6a76b63b62',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({query})
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return Promise.reject('something went wrong!')
+        }
+      })
+      .then((data) => {
+        dispatch({ type: 'get_exercise', payload: data.exercises })
+      })
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'login_patient':
       return { ...state, isLoggedIn: true }
     case 'get_record':
       return { ...state, record: action.payload }
+    case 'get_nutrition':
+      return { ...state, nutritions: action.payload}
+    case 'get_exercise':
+      return { ...state, exercises: action.payload }
     default:
       return state
   }
