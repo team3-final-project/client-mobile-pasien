@@ -157,6 +157,10 @@ function Home({ navigation }) {
     navigation.navigate('Diagnose')
   }
 
+  function navigateToDocDiagnose() {
+    navigation.navigate('Report Doctor')
+  }
+
   function logout() {
     navigation.navigate('Welcome')
   }
@@ -201,7 +205,9 @@ function Home({ navigation }) {
               </TouchableOpacity>
             </View>
           ))} */}
-              <TouchableOpacity style={styles.reportCard}>
+              <TouchableOpacity
+                style={styles.reportCard}
+                onPress={navigateToDocDiagnose}>
                 <Text style={styles.cardOption}>Laporan Diagnosa Dokter</Text>
                 <Image
                   source={require('../assets/case-file.png')}

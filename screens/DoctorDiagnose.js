@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as Linking from 'expo-linking'
 import { readRecord } from '../store/index'
 
-function Diagnose() {
+function DiagnoseDoc() {
   const dispatch = useDispatch()
   const { patientData } = useSelector((state) => state.record)
   useEffect(() => {
@@ -19,16 +19,19 @@ function Diagnose() {
     }
   }
 
-  console.log(patientData)
+  console.log(patientData.MedicalRecords.length)
+
   return (
     <View style={styles.container}>
       <View
         style={{ alignSelf: 'center', paddingTop: '10%', marginBottom: 10 }}>
-        <Text style={styles.h1}>Hasil Checkup Anda</Text>
+        <Text color={'#fff'} style={styles.h1}>
+          Hasil Diagnosis Anda
+        </Text>
       </View>
       <Image
         style={{ alignSelf: 'center', marginBottom: 10 }}
-        source={require('../assets/magnifier-egk.png')}
+        source={require('../assets/scientist.png')}
       />
       <View
         style={{
@@ -36,20 +39,35 @@ function Diagnose() {
           justifyContent: 'space-around',
           flexWrap: 'wrap'
         }}>
-        {patientData.HospitalRecords.map((el) => (
-          <View style={styles.Card} key={el.id}>
-            <Text style={styles.h2}>{el.type_test}</Text>
-            <Text style={{ color: '#95afc0' }}>{el.date}</Text>
-            <Image style={styles.stretch} source={{ uri: el.file }} />
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => btnDetailPress(el.file)}>
-              <Text style={{ color: '#fff', textAlign: 'center' }}>
-                Download
-              </Text>
-            </TouchableOpacity>
+        {patientData.MedicalRecords.length < 1 ? (
+          <View style={styles.emptyContent}>
+            <Image
+              style={{
+                alignSelf: 'center',
+                marginBottom: 10,
+                resizeMode: 'contain',
+                width: 80
+              }}
+              source={require('../assets/like.png')}
+            />
+            <Text style={{ color: '#95afc0' }}>Belum ada laporan</Text>
           </View>
-        ))}
+        ) : (
+          patientData.MedicalRecords.map((el) => (
+            <View style={styles.Card} key={el.id}>
+              <Text style={styles.h2}>{el.medicine_name}</Text>
+              <Text style={{ color: '#95afc0' }}>{el.dosis}</Text>
+              <Text>Jumlah obat: {el.jumlah_obat}</Text>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => btnDetailPress(el.file)}>
+                <Text style={{ color: '#fff', textAlign: 'center' }}>
+                  Download
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))
+        )}
       </View>
     </View>
   )
@@ -90,6 +108,15 @@ const styles = StyleSheet.create({
     height: 100,
     alignSelf: 'center',
     resizeMode: 'contain'
+  },
+  emptyContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#fff',
+    backgroundColor: '#fff',
+    minHeight: '50%',
+    borderRadius: 10
   }
 })
-export default Diagnose
+export default DiagnoseDoc
