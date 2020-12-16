@@ -28,7 +28,7 @@ function HealthyLife() {
                 <View
                 >
                 <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: 100, marginLeft: 10 }}
+                    style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: 100 }}
                 />
                 </View>
                 <View>
