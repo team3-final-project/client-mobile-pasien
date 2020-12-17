@@ -177,7 +177,7 @@ function Home({ navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.nav}>
-          <Text style={styles.header}>Selamat Datang</Text>
+          <Text style={styles.header}>Welcome</Text>
           <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
             <Text style={{ color: '#fff', textAlign: 'center' }}>Logout</Text>
           </TouchableOpacity>
@@ -216,7 +216,7 @@ function Home({ navigation }) {
               <TouchableOpacity
                 style={styles.reportCard}
                 onPress={navigateToDocDiagnose}>
-                <Text style={styles.cardOption}>Laporan Diagnosa Dokter</Text>
+                <Text style={styles.cardOption}>Doctor Diagnose</Text>
                 <Image
                   source={require('../assets/case-file.png')}
                   style={{ resizeMode: 'contain', width: 80, height: 80 }}
@@ -241,7 +241,7 @@ function Home({ navigation }) {
               <TouchableOpacity
                 style={styles.reportCard}
                 onPress={navigateToHospitalCheck}>
-                <Text style={styles.cardOption}>Laporan Hasil Checkup</Text>
+                <Text style={styles.cardOption}>Checkup Result</Text>
                 <Image
                   source={require('../assets/egk-report.png')}
                   style={{ resizeMode: 'contain', width: 80, height: 80 }}
@@ -263,8 +263,10 @@ function Home({ navigation }) {
               </TouchableOpacity>
             </View>
           ))} */}
-              <TouchableOpacity style={styles.reportCard} onPress={navigateToMaps}>
-                <Text style={styles.cardOption}>Rumah Sakit Terdekat</Text>
+              <TouchableOpacity
+                style={styles.reportCard}
+                onPress={navigateToMaps}>
+                <Text style={styles.cardOption}>Nearby Hospital</Text>
                 <Image
                   source={require('../assets/healthcare.png')}
                   style={{ resizeMode: 'contain', width: 80, height: 80 }}
@@ -272,10 +274,12 @@ function Home({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.reportCardSection}>
-              <TouchableOpacity style={styles.reportCard} onPress={navigateToHealthyLife}>
-                <Text style={styles.cardOption}>Healty Life</Text>
+              <TouchableOpacity
+                style={styles.reportCard}
+                onPress={navigateToHealthyLife}>
+                <Text style={styles.cardOption}>Nutrition Check</Text>
                 <Image
-                  source={require('../assets/healthylife.png')}
+                  source={require('../assets/healty.png')}
                   style={{ resizeMode: 'contain', width: 80, height: 80 }}
                 />
               </TouchableOpacity>
@@ -321,16 +325,17 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   profileSection: {
+    justifyContent: 'center',
     flex: 1,
     backgroundColor: '#fff',
     width: 350,
     padding: 10,
-    marginLeft: 20,
     marginVertical: 20,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
-    borderColor: '#DAE0E2'
+    borderColor: '#DAE0E2',
+    alignSelf: 'center'
   },
   bio: {
     marginLeft: 10

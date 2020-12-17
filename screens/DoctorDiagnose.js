@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Linking
+} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 // import * as Linking from 'expo-linking'
 
@@ -13,7 +20,7 @@ function DiagnoseDoc() {
   }, [])
 
   function btnDetailPress(link) {
-    console.log(link, '<<<< linkUrl');
+    console.log(link, '<<<< linkUrl')
     // if (link == 'file') {
     //   alert('Invalid Link')
     // } else {
@@ -28,7 +35,7 @@ function DiagnoseDoc() {
       <View
         style={{ alignSelf: 'center', paddingTop: '10%', marginBottom: 10 }}>
         <Text color={'#fff'} style={styles.h1}>
-          Hasil Diagnosis Anda
+          Your Diagnose Report
         </Text>
       </View>
       <Image
@@ -52,7 +59,7 @@ function DiagnoseDoc() {
               }}
               source={require('../assets/like.png')}
             />
-            <Text style={{ color: '#95afc0' }}>Belum ada laporan</Text>
+            <Text style={{ color: '#95afc0' }}>No report yet</Text>
           </View>
         ) : (
           patientData.MedicalRecords.map((el) => (
