@@ -24,6 +24,8 @@ function Login({ navigation }) {
         name: name
       })
     )
+    setNik('')
+    setName('')
   }
 
   useEffect(() => {

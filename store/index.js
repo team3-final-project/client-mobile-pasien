@@ -11,7 +11,7 @@ const initialState = {
 
 export function login(input) {
   return (dispatch) => {
-    fetch('http://192.168.1.71:3001/patient', {
+    fetch('http://192.168.0.104:3000/patient', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -43,11 +43,11 @@ export function login(input) {
 export function readRecord() {
   return async (dispatch) => {
     const access_token = await AsyncStorage.getItem('access_token')
-    fetch('http://192.168.1.71:3001/patient', {
+    fetch('http://192.168.0.104:3000/patient', {
       method: 'GET',
       headers: {
         access_token
-          // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlrIjoiMTIzNDU2Nzg5IiwibmFtZSI6IlBhdGllbnQgMSIsImlhdCI6MTYwODAxNzg4MH0.qRjDisQmppTm0rrRjVCR3PVEJx1_Bqos-tIlU6OpHdA'
+        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlrIjoiMTIzNDU2Nzg5IiwibmFtZSI6IlBhdGllbnQgMSIsImlhdCI6MTYwODAxNzg4MH0.qRjDisQmppTm0rrRjVCR3PVEJx1_Bqos-tIlU6OpHdA'
       }
     })
       .then((response) => {
@@ -72,7 +72,7 @@ export function readNutrition(query) {
         'x-app-key': '3bccb2bf4eb86039bfe2a703490f26f8',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({query})
+      body: JSON.stringify({ query })
     })
       .then((response) => {
         if (response.ok) {
@@ -82,7 +82,7 @@ export function readNutrition(query) {
         }
       })
       .then((data) => {
-        console.log(data, '<<daataNutritions');
+        console.log(data, '<<daataNutritions')
         dispatch({ type: 'get_nutrition', payload: data.foods })
       })
   }
@@ -97,7 +97,7 @@ export function readExercise(query) {
         'x-app-key': 'ec1ba99dbd6a57054dcc5e6a76b63b62',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({query})
+      body: JSON.stringify({ query })
     })
       .then((response) => {
         if (response.ok) {
@@ -119,7 +119,7 @@ const reducer = (state = initialState, action) => {
     case 'get_record':
       return { ...state, record: action.payload }
     case 'get_nutrition':
-      return { ...state, nutritions: action.payload}
+      return { ...state, nutritions: action.payload }
     case 'get_exercise':
       return { ...state, exercises: action.payload }
     default:

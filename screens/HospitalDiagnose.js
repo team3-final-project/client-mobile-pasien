@@ -24,7 +24,7 @@ function Diagnose() {
     <View style={styles.container}>
       <View
         style={{ alignSelf: 'center', paddingTop: '10%', marginBottom: 10 }}>
-        <Text style={styles.h1}>Tests result</Text>
+        <Text style={styles.h1}>Your Test Result</Text>
       </View>
       <Image
         style={{ alignSelf: 'center', marginBottom: 10 }}
