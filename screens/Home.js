@@ -36,23 +36,14 @@ function Home({ navigation }) {
       .doc('h5mjuGm0apJBldX6fMc7')
       .get()
       .then((value) => {
-        console.log(value.data())
         push = value.data().notification
+        if (push) {
+          newMedicalRecord(expoPushToken)
+          dispatch(readRecord())
+          setExpoPushToken('')
+        }
       })
 
-    console.log(push, '<<<<')
-
-    if (push) {
-      console.log('siap di push notif')
-      newMedicalRecord(expoPushToken)
-      dispatch(readRecord())
-
-      let remind = setInterval(function(){ 
-        reminder(expoPushToken)
-      }, 10000);
-
-      clearInterval(remind)
-    }
     await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
       notification: false
     })
@@ -61,7 +52,6 @@ function Home({ navigation }) {
   db.collection('med')
     .doc('h5mjuGm0apJBldX6fMc7')
     .onSnapshot((snapshot) => {
-      console.log('berubah')
       parameterChange()
     })
 
@@ -160,7 +150,6 @@ function Home({ navigation }) {
         return
       }
       token = (await Notifications.getExpoPushTokenAsync()).data
-      console.log(token)
     } else {
       alert('Must use physical device for Push Notifications')
     }

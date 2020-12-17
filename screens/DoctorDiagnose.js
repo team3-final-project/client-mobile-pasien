@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import {
+  ScrollView,
   View,
   Text,
   StyleSheet,
@@ -31,7 +32,7 @@ function DiagnoseDoc() {
   console.log(patientData.MedicalRecords.length)
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View
         style={{ alignSelf: 'center', paddingTop: '10%', marginBottom: 10 }}>
         <Text color={'#fff'} style={styles.h1}>
@@ -78,7 +79,7 @@ function DiagnoseDoc() {
           ))
         )}
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
