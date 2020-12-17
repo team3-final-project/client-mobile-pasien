@@ -48,7 +48,7 @@ function Login({ navigation }) {
           style={{ marginBottom: 10, alignSelf: 'center' }}
         />
         <Text style={{ alignSelf: 'center', marginBottom: 10 }}>
-          Masukkan Identitas Anda
+          Input Your Identity
         </Text>
         <View style={styles.inputForm}>
           <TextInput
@@ -59,7 +59,7 @@ function Login({ navigation }) {
         </View>
         <View style={styles.inputForm}>
           <TextInput
-            placeholder="Nama Lengkap"
+            placeholder="Full name"
             onChangeText={(text) => handlingName(text)}
           />
         </View>
