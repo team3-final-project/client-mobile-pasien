@@ -11,7 +11,7 @@ const initialState = {
 
 export function login(input) {
   return (dispatch) => {
-    fetch('http://192.168.1.71:3001/patient', {
+    fetch('http://192.168.43.137:3000/patient', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export function login(input) {
 export function readRecord() {
   return async (dispatch) => {
     const access_token = await AsyncStorage.getItem('access_token')
-    fetch('http://192.168.1.71:3001/patient', {
+    fetch('http://192.168.43.137:3000/patient', {
       method: 'GET',
       headers: {
         access_token
@@ -68,8 +68,8 @@ export function readNutrition(query) {
     fetch('https://trackapi.nutritionix.com/v2/natural/nutrients', {
       method: 'POST',
       headers: {
-        'x-app-id': '15f77b03',
-        'x-app-key': 'ec1ba99dbd6a57054dcc5e6a76b63b62',
+        'x-app-id': '0b3f19c1',
+        'x-app-key': '3bccb2bf4eb86039bfe2a703490f26f8',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({query})
@@ -82,6 +82,7 @@ export function readNutrition(query) {
         }
       })
       .then((data) => {
+        console.log(data, '<<daataNutritions');
         dispatch({ type: 'get_nutrition', payload: data.foods })
       })
   }
