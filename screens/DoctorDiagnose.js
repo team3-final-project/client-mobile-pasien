@@ -28,7 +28,7 @@ function DiagnoseDoc() {
       <View
         style={{ alignSelf: 'center', paddingTop: '10%', marginBottom: 10 }}>
         <Text color={'#fff'} style={styles.h1}>
-          Hasil Diagnosis Anda
+          Diagnose
         </Text>
       </View>
       <Image
@@ -52,14 +52,14 @@ function DiagnoseDoc() {
               }}
               source={require('../assets/like.png')}
             />
-            <Text style={{ color: '#95afc0' }}>Belum ada laporan</Text>
+            <Text style={{ color: '#95afc0' }}>You have no report</Text>
           </View>
         ) : (
           patientData.MedicalRecords.map((el) => (
             <View style={styles.Card} key={el.id}>
               <Text style={styles.h2}>{el.medicine_name}</Text>
               <Text style={{ color: '#95afc0' }}>{el.dosis}</Text>
-              <Text>Jumlah obat: {el.jumlah_obat}</Text>
+              <Text>Quantity: {el.jumlah_obat}</Text>
               {/* <TouchableOpacity
                 style={styles.btn}
                 onPress={() => btnDetailPress(el.file)}>
