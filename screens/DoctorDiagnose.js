@@ -66,7 +66,7 @@ function DiagnoseDoc() {
             <View style={styles.Card} key={el.id}>
               <Text style={styles.h2}>{el.medicine_name}</Text>
               <Text style={{ color: '#95afc0' }}>{el.dosis}</Text>
-              <Text>Jumlah obat: {el.jumlah_obat}</Text>
+              <Text>Quantity: {el.jumlah_obat}</Text>
               {/* <TouchableOpacity
                 style={styles.btn}
                 onPress={() => btnDetailPress(el.file)}>

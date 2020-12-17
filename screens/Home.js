@@ -28,122 +28,154 @@ function Home({ navigation }) {
     dispatch(readRecord())
   }, [])
 
-  // const parameterChange = async () => {
-  //   console.log('masuk sini')
-  //   let push = false
+  const parameterChange = async () => {
+    let push = false
 
-  //   await db
-  //     .collection('med')
-  //     .doc('h5mjuGm0apJBldX6fMc7')
-  //     .get()
-  //     .then((value) => {
-  //       console.log(value.data())
-  //       push = value.data().notification
-  //       console.log(push, 'disini harusnya true')
-  //     })
+    await db
+      .collection('med')
+      .doc('h5mjuGm0apJBldX6fMc7')
+      .get()
+      .then((value) => {
+        console.log(value.data())
+        push = value.data().notification
+      })
 
-  //   console.log(push, '<<<<')
+    console.log(push, '<<<<')
 
-  //   if (push) {
-  //     console.log('siap di push notif')
-  //     newMedicalRecord(expoPushToken)
-  //     dispatch(readRecord())
-  //   }
-  //   await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
-  //     notification: false
-  //   })
-  // }
+    if (push) {
+      console.log('siap di push notif')
+      newMedicalRecord(expoPushToken)
+      dispatch(readRecord())
 
-  // db.collection('med')
-  //   .doc('h5mjuGm0apJBldX6fMc7')
-  //   .onSnapshot((snapshot) => {
-  //     console.log('berubah')
-  //     parameterChange()
-  //   })
+      let remind = setInterval(function(){ 
+        reminder(expoPushToken)
+      }, 10000);
 
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
+      clearInterval(remind)
+    }
+    await db.collection('med').doc('h5mjuGm0apJBldX6fMc7').update({
+      notification: false
+    })
+  }
 
-  //   notificationListener.current = Notifications.addNotificationReceivedListener(
-  //     (notification) => {
-  //       setNotification(notification)
-  //     }
-  //   )
+  db.collection('med')
+    .doc('h5mjuGm0apJBldX6fMc7')
+    .onSnapshot((snapshot) => {
+      console.log('berubah')
+      parameterChange()
+    })
 
-  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(
-  //     (response) => {
-  //       console.log(response)
-  //     }
-  //   )
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
 
-  //   return () => {
-  //     Notifications.removeNotificationSubscription(notificationListener)
-  //     Notifications.removeNotificationSubscription(responseListener)
-  //   }
-  // }, [])
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification)
+      }
+    )
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response)
+      }
+    )
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener)
+      Notifications.removeNotificationSubscription(responseListener)
+    }
+  }, [])
 
   const { patientData } = useSelector((state) => state.record)
 
-  // Notifications.setNotificationHandler({
-  //   handleNotification: async () => ({
-  //     shouldShowAlert: true,
-  //     shouldPlaySound: false,
-  //     shouldSetBadge: false
-  //   })
-  // })
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false
+    })
+  })
 
-  // async function newMedicalRecord(expoPushToken) {
-  //   const message = {
-  //     to: expoPushToken,
-  //     sound: 'default',
-  //     title: 'Ada yang baru nih!',
-  //     body: 'Diagnosamu sudah terbaharui!',
-  //     data: { data: 'goes here' }
-  //   }
+  async function newMedicalRecord(expoPushToken) {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Something new!',
+      body: 'Diagnose of yours has been updated!!',
+      data: { data: 'goes here' }
+    }
 
-  //   await fetch('https://exp.host/--/api/v2/push/send', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Accept-encoding': 'gzip, deflate',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(message)
-  //   })
-  // }
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(message)
+    })
+  }
 
-  // async function registerForPushNotificationsAsync() {
-  //   let token
-  //   if (Constants.isDevice) {
-  //     const { status: existingStatus } = await Permissions.getAsync(
-  //       Permissions.NOTIFICATIONS
-  //     )
-  //     let finalStatus = existingStatus
-  //     if (existingStatus !== 'granted') {
-  //       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-  //       finalStatus = status
-  //     }
-  //     if (finalStatus !== 'granted') {
-  //       alert('Failed to get push token for push notification!')
-  //       return
-  //     }
-  //     token = (await Notifications.getExpoPushTokenAsync()).data
-  //     console.log(token)
-  //   } else {
-  //     alert('Must use physical device for Push Notifications')
-  //   }
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false
+    })
+  })
 
-  //   if (Platform.OS === 'android') {
-  //     Notifications.setNotificationChannelAsync('default', {
-  //       name: 'default',
-  //       importance: Notifications.AndroidImportance.MAX,
-  //       vibrationPattern: [0, 250, 250, 250],
-  //       lightColor: '#FF231F7C'
-  //     })
-  //   }
+  async function reminder(expoPushToken) {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Reminder!',
+      body: 'Do not forget to take your medication!',
+      data: { data: 'goes here' }
+    }
 
-  //   return token
-  // }
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(message)
+    })
+  }
+
+  async function registerForPushNotificationsAsync() {
+    let token
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      )
+      let finalStatus = existingStatus
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+        finalStatus = status
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!')
+        return
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data
+      console.log(token)
+    } else {
+      alert('Must use physical device for Push Notifications')
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C'
+      })
+    }
+
+    return token
+  }
 
   if (!patientData) {
     return (

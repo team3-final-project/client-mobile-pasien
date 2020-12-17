@@ -50,7 +50,7 @@ function Login({ navigation }) {
           style={{ marginBottom: 10, alignSelf: 'center' }}
         />
         <Text style={{ alignSelf: 'center', marginBottom: 10 }}>
-          Insert your identity
+          Input Your Identity
         </Text>
         <View style={styles.inputForm}>
           <TextInput
@@ -61,7 +61,7 @@ function Login({ navigation }) {
         </View>
         <View style={styles.inputForm}>
           <TextInput
-            placeholder="Name"
+            placeholder="Full name"
             onChangeText={(text) => handlingName(text)}
           />
         </View>

@@ -39,187 +39,198 @@ function HealthyLife() {
 
   const nutrition = () => {
     return (
-      <View style={styles.thirdflex}>
-        <Card containerStyle={{ padding: 10 }}>
-          {dataNutritions.map((e, index) => (
-            <View key={index}>
-              <View
-                style={{ borderBottomWidth: 3, borderBottomColor: 'black' }}>
-                <Card.Title style={{ padding: 0, margin: 0, fontSize: 30 }}>
-                  Nutrition Facts
-                </Card.Title>
+      <View>
+        <Text
+          style={{
+            textAlign: 'center',
+            color: '#fff',
+            fontSize: 20,
+            fontWeight: '700'
+          }}>
+          Result
+        </Text>
+        <View style={styles.thirdflex}>
+          <Card containerStyle={{ padding: 10 }}>
+            {dataNutritions.map((e, index) => (
+              <View key={index}>
+                <View
+                  style={{ borderBottomWidth: 3, borderBottomColor: 'black' }}>
+                  <Card.Title style={{ padding: 0, margin: 0, fontSize: 30 }}>
+                    Nutrition Facts
+                  </Card.Title>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black'
+                  }}>
+                  <Text>Amount Per Serving</Text>
+                </View>
+                <View
+                  style={{
+                    height: 27,
+                    padding: 1,
+                    borderBottomWidth: 7,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Calories</Text>
+                  <Text>{e.nf_calories}</Text>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end'
+                  }}>
+                  <Text></Text>
+                  <Text>% Daily Value</Text>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Total Fat</Text>
+                  <Text>{e.nf_total_fat} %</Text>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Cholesterol</Text>
+                  <Text>{e.nf_cholesterol} %</Text>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Sodium</Text>
+                  <Text>{e.nf_sodium} %</Text>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Potassium</Text>
+                  <Text>{e.nf_potassium} %</Text>
+                </View>
+                <View
+                  style={{
+                    height: 20,
+                    padding: 1,
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Total Carbohydrates</Text>
+                  <Text>{e.nf_total_carbohydrate} %</Text>
+                </View>
+                <View
+                  style={{
+                    height: 28,
+                    padding: 1,
+                    borderBottomWidth: 10,
+                    borderBottomColor: 'black',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                  <Text>Protein</Text>
+                  <Text>{e.nf_protein} %</Text>
+                </View>
+                {e.full_nutrients.map((el) => {
+                  if (el.attr_id === 318) {
+                    return (
+                      <View
+                        style={{
+                          height: 20,
+                          padding: 1,
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'black',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between'
+                        }}>
+                        <Text>Vitamin A</Text>
+                        <Text>{el.value} %</Text>
+                      </View>
+                    )
+                  } else if (el.attr_id === 401) {
+                    return (
+                      <View
+                        style={{
+                          height: 20,
+                          padding: 1,
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'black',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between'
+                        }}>
+                        <Text>Vitamin C</Text>
+                        <Text>{el.value} %</Text>
+                      </View>
+                    )
+                  } else if (el.attr_id === 301) {
+                    return (
+                      <View
+                        style={{
+                          height: 20,
+                          padding: 1,
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'black',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between'
+                        }}>
+                        <Text>Calcium</Text>
+                        <Text>{el.value} %</Text>
+                      </View>
+                    )
+                  } else if (el.attr_id === 303) {
+                    return (
+                      <View
+                        style={{
+                          height: 20,
+                          padding: 1,
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'black',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between'
+                        }}>
+                        <Text>Iron</Text>
+                        <Text>{el.value} %</Text>
+                      </View>
+                    )
+                  }
+                })}
               </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black'
-                }}>
-                <Text>Amount Per Serving</Text>
-              </View>
-              <View
-                style={{
-                  height: 27,
-                  padding: 1,
-                  borderBottomWidth: 7,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Calories</Text>
-                <Text>{e.nf_calories}</Text>
-              </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end'
-                }}>
-                <Text></Text>
-                <Text>% Daily Value</Text>
-              </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Total Fat</Text>
-                <Text>{e.nf_total_fat} %</Text>
-              </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Cholesterol</Text>
-                <Text>{e.nf_cholesterol} %</Text>
-              </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Sodium</Text>
-                <Text>{e.nf_sodium} %</Text>
-              </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Potassium</Text>
-                <Text>{e.nf_potassium} %</Text>
-              </View>
-              <View
-                style={{
-                  height: 20,
-                  padding: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Total Carbohydrates</Text>
-                <Text>{e.nf_total_carbohydrate} %</Text>
-              </View>
-              <View
-                style={{
-                  height: 28,
-                  padding: 1,
-                  borderBottomWidth: 10,
-                  borderBottomColor: 'black',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}>
-                <Text>Protein</Text>
-                <Text>{e.nf_protein} %</Text>
-              </View>
-              {e.full_nutrients.map((el) => {
-                if (el.attr_id === 318) {
-                  return (
-                    <View
-                      style={{
-                        height: 20,
-                        padding: 1,
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'black',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                      }}>
-                      <Text>Vitamin A</Text>
-                      <Text>{el.value} %</Text>
-                    </View>
-                  )
-                } else if (el.attr_id === 401) {
-                  return (
-                    <View
-                      style={{
-                        height: 20,
-                        padding: 1,
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'black',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                      }}>
-                      <Text>Vitamin C</Text>
-                      <Text>{el.value} %</Text>
-                    </View>
-                  )
-                } else if (el.attr_id === 301) {
-                  return (
-                    <View
-                      style={{
-                        height: 20,
-                        padding: 1,
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'black',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                      }}>
-                      <Text>Calcium</Text>
-                      <Text>{el.value} %</Text>
-                    </View>
-                  )
-                } else if (el.attr_id === 303) {
-                  return (
-                    <View
-                      style={{
-                        height: 20,
-                        padding: 1,
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'black',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                      }}>
-                      <Text>Iron</Text>
-                      <Text>{el.value} %</Text>
-                    </View>
-                  )
-                }
-              })}
-            </View>
-          ))}
-        </Card>
+            ))}
+          </Card>
+        </View>
       </View>
     )
   }
@@ -269,7 +280,7 @@ function HealthyLife() {
                 color: '#000000'
               }}
               onChangeText={(text) => handlingInput(text)}
-              placeholder="Tulis di sini..."
+              placeholder="Write something here"
             />
           </View>
         </View>
@@ -319,8 +330,10 @@ function HealthyLife() {
           </View>
         </View>
       </View>
-      {category === 'nutrition' && nutrition()}
-      {category === 'exercise' && exercise()}
+      <View>
+        {category === 'nutrition' && nutrition()}
+        {category === 'exercise' && exercise()}
+      </View>
     </ScrollView>
   )
 }
@@ -342,7 +355,8 @@ const styles = StyleSheet.create({
   },
   thirdflex: {
     flexDirection: 'row',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: 50
   },
   h1: {
     fontSize: 24,
