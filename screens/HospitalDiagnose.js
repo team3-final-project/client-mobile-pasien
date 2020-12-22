@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import * as Linking from 'expo-linking'
 import { readRecord } from '../store/index'
@@ -21,7 +21,7 @@ function Diagnose() {
 
   console.log(patientData)
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View
         style={{ alignSelf: 'center', paddingTop: '10%', marginBottom: 10 }}>
         <Text style={styles.h1}>Your Test Result</Text>
@@ -51,7 +51,7 @@ function Diagnose() {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
