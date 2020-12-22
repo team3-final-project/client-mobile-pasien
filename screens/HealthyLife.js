@@ -87,6 +87,8 @@ function HealthyLife() {
         })
     })
 
+    let totalSemua = totalfat + 5 + cholesterol + sodium/1000 + potassium/1000 + carbohydrate + protein
+
 
 
     const nutrition = () => {
@@ -102,52 +104,47 @@ function HealthyLife() {
                                 <Text>Amount Per Serving</Text>
                             </View>
                             <View style={{ height: 27, padding: 1, borderBottomWidth: 7, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Calories</Text>
-                                <Text>{calories}</Text>
+                                <Text>Calories {calories}</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'flex-end' }}>
                                 <Text></Text>
                                 <Text>% Daily Value</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Total Fat</Text>
-                                <Text>{totalfat} %</Text>
+                                <Text>Total Fat {totalfat} gr</Text>
+                                <Text>{Math.round(totalfat/totalSemua * 100)} %</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Cholesterol</Text>
-                                <Text>{cholesterol} %</Text>
+                                <Text>Cholesterol {cholesterol} mg</Text>
+                                <Text>{Math.round(cholesterol/totalSemua * 100)} %</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Sodium</Text>
-                                <Text>{sodium} %</Text>
+                                <Text>Sodium {sodium} mg</Text>
+                                <Text>{Math.round(sodium/totalSemua * 0.1)} %</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Potassium</Text>
-                                <Text>{potassium} %</Text>
+                                <Text>Potassium {potassium} mg</Text>
+                                <Text>{Math.round(potassium/totalSemua * 0.1)} %</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Total Carbohydrates</Text>
-                                <Text>{carbohydrate} %</Text>
+                                <Text>Total Carbohydrate {carbohydrate} gr</Text>
+                                <Text>{Math.round(carbohydrate/totalSemua * 100)} %</Text>
                             </View>
                             <View style={{ height: 28, padding: 1, borderBottomWidth: 10, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Protein</Text>
-                                <Text>{protein} %</Text>
+                                <Text>Protein {protein} gr</Text>
+                                <Text>{Math.round(protein/totalSemua * 100)} %</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Vitamin A</Text>
-                                <Text>{vitA} %</Text>
+                                <Text>Vitamin A {vitA} mg</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Vitamin C</Text>
-                                <Text>{vitC} %</Text>
+                                <Text>Vitamin C {vitC} mg</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Calcium</Text>
-                                <Text>{calcium} %</Text>
+                                <Text>Calcium {calcium} mg</Text>
                             </View>
                             <View style={{ height: 20, padding: 1, borderBottomWidth: 1, borderBottomColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text>Iron</Text>
-                                <Text>{iron} %</Text>
+                                <Text>Iron {iron} mg</Text>
                             </View>
                         </View>
                 </Card>
